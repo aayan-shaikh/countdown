@@ -95,6 +95,10 @@ export default function App() {
   // --------------------------
   return (
     <div className={`app theme-${bg} accent-${accent}`}>
+      <head>
+        <title>{`${title} | Countdown`}</title>
+        <meta name="description" content={subtitle} />
+      </head>
       <div className="container">
         <h1>{title}</h1>
         <h2>{subtitle}</h2>
