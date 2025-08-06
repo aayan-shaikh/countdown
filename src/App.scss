@@ -1,0 +1,380 @@
+// App.scss — Polished themes (no breaking changes, zero radius preserved)
+* {
+  box-sizing: border-box;
+  border-radius: 0 !important;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  line-height: 1.5;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.app {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Shared decorative layers */
+.app::before,
+.app::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.app::after {
+  /* Fine noise texture overlay for depth */
+  background-image: url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'>\
+    <filter id='n' x='0' y='0'>\
+      <feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/>\
+      <feColorMatrix type='saturate' values='0'/>\
+      <feComponentTransfer><feFuncA type='table' tableValues='0 0 0 0 .05 .09 .12 .16'/></feComponentTransfer>\
+    </filter>\
+    <rect width='100%' height='100%' filter='url(%23n)' opacity='.22'/>\
+  </svg>");
+  mix-blend-mode: soft-light;
+}
+
+/* Container (glass card tuned per theme via CSS variables) */
+.container {
+  width: 100%;
+  max-width: 860px;
+  padding: 24px;
+  background: var(--card-bg, rgba(255, 255, 255, 0.06));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.18));
+  box-shadow: 0 18px 55px var(--shadow, rgba(0, 0, 0, 0.35));
+  color: var(--fg, #fff);
+
+  @media (min-width: 768px) {
+    padding: 36px;
+  }
+}
+
+/* ---------- themes (each sets CSS vars for card/fg/accent/glows) ---------- */
+
+/* Dark — deep cosmic gradient with cool glows */
+.theme-dark {
+  color: #fff;
+  background:
+    radial-gradient(1200px 700px at 10% -10%, #1b2361 0%, transparent 55%),
+    radial-gradient(900px 600px at 90% 110%, #2a1856 0%, transparent 60%),
+    linear-gradient(160deg, #0c0f1e 0%, #0f1222 100%);
+
+  --fg: #eef2ff;
+  --muted: #aab2c8;
+  --accent: var(--accent, #6c9fff);
+  --card-bg: rgba(20, 24, 45, 0.55);
+  --card-border: rgba(120, 140, 255, 0.18);
+  --shadow: rgba(5, 9, 30, 0.6);
+}
+
+/* Light — refined paper with ink-like accents */
+.theme-light {
+  color-scheme: light;
+  color: #111;
+  background:
+    radial-gradient(900px 600px at 10% -10%, #ffffff 0%, transparent 55%),
+    radial-gradient(800px 500px at 90% 110%, #e7ecff 0%, transparent 60%),
+    linear-gradient(160deg, #f7f7fb 0%, #eceff6 100%);
+
+  --fg: #111;
+  --muted: #4b5563;
+  --accent: var(--accent, #3b82f6);
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(0, 0, 0, 0.08);
+  --shadow: rgba(0, 0, 0, 0.12);
+}
+
+/* Neon — cyber black with electric edges */
+.theme-neon {
+  color: #eaffff;
+  background:
+    radial-gradient(900px 600px at 15% -10%, rgba(0, 255, 255, 0.14), transparent 55%),
+    radial-gradient(900px 600px at 85% 110%, rgba(255, 0, 255, 0.1), transparent 55%),
+    linear-gradient(180deg, #050505, #0d0d0d);
+
+  --fg: #eaffff;
+  --muted: #9adada;
+  --accent: var(--accent, #00f6ff);
+  --card-bg: rgba(10, 14, 16, 0.6);
+  --card-border: rgba(0, 255, 248, 0.18);
+  --shadow: rgba(0, 0, 0, 0.65);
+}
+
+/* Sunset — cinematic warm gradient with soft bloom */
+.theme-sunset {
+  color: #fff;
+  background:
+    radial-gradient(1200px 700px at 10% -10%, rgba(255, 215, 180, 0.25), transparent 55%),
+    radial-gradient(900px 600px at 90% 110%, rgba(255, 120, 120, 0.22), transparent 60%),
+    linear-gradient(160deg, #ff5f6d 0%, #ffc371 100%);
+
+  --fg: #fffaf7;
+  --muted: #ffe6dc;
+  --accent: var(--accent, #ffd166);
+  --card-bg: rgba(255, 255, 255, 0.14);
+  --card-border: rgba(255, 255, 255, 0.28);
+  --shadow: rgba(120, 40, 25, 0.35);
+}
+
+/* Forest — lush greens with misty layers */
+.theme-forest {
+  color: #f6fff9;
+  background:
+    radial-gradient(1100px 700px at 15% -10%, rgba(120, 255, 210, 0.22), transparent 55%),
+    radial-gradient(900px 600px at 90% 110%, rgba(20, 120, 80, 0.22), transparent 60%),
+    linear-gradient(160deg, #134e5e 0%, #71b280 100%);
+
+  --fg: #f6fff9;
+  --muted: #cde7d7;
+  --accent: var(--accent, #22d3a6);
+  --card-bg: rgba(14, 36, 30, 0.5);
+  --card-border: rgba(180, 240, 220, 0.22);
+  --shadow: rgba(6, 32, 24, 0.6);
+}
+
+/* ---------- accent colours (kept same API, enrich via glow) ---------- */
+.accent-blue {
+  --accent: #6c9fff;
+}
+
+.accent-red {
+  --accent: #ff6b6b;
+}
+
+.accent-green {
+  --accent: #4ade80;
+}
+
+.accent-purple {
+  --accent: #a855f7;
+}
+
+.accent-orange {
+  --accent: #fb923c;
+}
+
+/* ---------- controls ---------- */
+.controls {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted, #aab2c8);
+}
+
+input,
+select {
+  margin-top: 4px;
+  padding: 10px;
+  font: inherit;
+  background: color-mix(in srgb, var(--card-bg) 70%, transparent);
+  border: 1px solid var(--card-border);
+  color: var(--fg);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease;
+
+  &:focus {
+    border-color: color-mix(in srgb, var(--accent), #ffffff 12%);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  &::placeholder {
+    color: color-mix(in srgb, var(--muted) 70%, transparent);
+  }
+}
+
+button {
+  padding: 12px 18px;
+  font: inherit;
+  font-weight: 700;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--accent) 92%, #ffffff 0%) 0%,
+      color-mix(in srgb, var(--accent) 72%, #000000 12%) 100%);
+  color: #000;
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--accent) 28%, transparent);
+
+  &:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+  }
+
+  &:active {
+    transform: translateY(0);
+    filter: brightness(0.98);
+  }
+}
+
+.share {
+  margin-top: 24px;
+  width: 100%;
+}
+
+/* ---------- countdown ---------- */
+.countdown-card {
+  margin-top: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* soft highlight sweep */
+.countdown-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(600px 200px at -10% -20%,
+      color-mix(in srgb, var(--accent) 18%, transparent),
+      transparent 60%);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.item {
+  background: color-mix(in srgb, var(--card-bg) 85%, transparent);
+  border: 1px solid var(--card-border);
+  padding: 16px 12px;
+  text-align: center;
+  position: relative;
+
+  /* inner glow */
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 14%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, #000000 12%, transparent);
+}
+
+.value {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  text-shadow: 0 0 20px color-mix(in srgb, var(--accent) 25%, transparent);
+
+  @media (min-width: 768px) {
+    font-size: 36px;
+  }
+}
+
+.label {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--muted) 90%, transparent);
+  opacity: 0.9;
+}
+
+/* Accent underline for headings */
+.container h1 {
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 900;
+  color: var(--fg);
+  background-image: linear-gradient(90deg,
+      color-mix(in srgb, var(--accent) 85%, transparent),
+      color-mix(in srgb, var(--accent) 35%, transparent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.container h2 {
+  margin: 0 0 20px 0;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Subtle animated ambient glows per theme */
+.theme-neon .app::before {
+  background:
+    radial-gradient(220px 160px at 20% 25%, rgba(0, 255, 255, 0.25), transparent 60%),
+    radial-gradient(220px 160px at 80% 75%, rgba(255, 0, 255, 0.18), transparent 60%);
+  animation: floatGlow 9s ease-in-out infinite alternate;
+}
+
+.theme-dark .app::before {
+  background:
+    radial-gradient(260px 180px at 20% 20%, rgba(108, 159, 255, 0.16), transparent 60%),
+    radial-gradient(240px 170px at 80% 80%, rgba(168, 85, 247, 0.12), transparent 60%);
+  animation: floatGlow 12s ease-in-out infinite alternate;
+}
+
+.theme-sunset .app::before {
+  background:
+    radial-gradient(320px 200px at 20% 20%, rgba(255, 210, 120, 0.22), transparent 60%),
+    radial-gradient(300px 190px at 80% 80%, rgba(255, 120, 120, 0.18), transparent 60%);
+  animation: floatGlow 11s ease-in-out infinite alternate;
+}
+
+.theme-forest .app::before {
+  background:
+    radial-gradient(300px 200px at 25% 25%, rgba(80, 200, 160, 0.2), transparent 60%),
+    radial-gradient(280px 190px at 75% 75%, rgba(40, 120, 80, 0.18), transparent 60%);
+  animation: floatGlow 13s ease-in-out infinite alternate;
+}
+
+.theme-light .app::before {
+  background:
+    radial-gradient(260px 180px at 20% 20%, rgba(80, 120, 255, 0.12), transparent 60%),
+    radial-gradient(240px 170px at 80% 80%, rgba(255, 120, 120, 0.12), transparent 60%);
+  animation: floatGlow 10s ease-in-out infinite alternate;
+}
+
+@keyframes floatGlow {
+  from {
+    transform: translateY(0px) scale(1);
+    opacity: 0.75;
+  }
+
+  to {
+    transform: translateY(-10px) scale(1.02);
+    opacity: 1;
+  }
+}
